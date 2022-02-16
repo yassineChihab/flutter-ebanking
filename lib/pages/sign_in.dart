@@ -65,16 +65,11 @@ class _SignInPageState extends State<SignInPage> {
             const SizedBox(
               width: 30,
             ),
-            SvgPicture.asset(cloud),
+
             const SizedBox(
               width: 8,
             ),
-             Text(
-              '34° C',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
+
           ],
         ),
         const SizedBox(
@@ -110,7 +105,7 @@ class _SignInPageState extends State<SignInPage> {
             height: 18,
           ),
           Text(
-            'Open An Account For Digital  E-Wallet Solutions.\nInstant Payouts. \n\nJoin For Free.',
+            'Open An Account For Digital  E-Wallet Solutions',
             style: TextStyle(
               color: Colors.white,
             ),

@@ -72,7 +72,7 @@ class Wallet extends StatelessWidget {
                       children: [
                         Image.asset(Assets.cardsVisaYellow,
                             width: 60, height: 50, fit: BoxFit.cover),
-                        const Text('\$20,000.00',
+                        const Text('\20,000.00 DH',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 32,

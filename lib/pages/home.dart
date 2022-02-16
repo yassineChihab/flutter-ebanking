@@ -1,14 +1,21 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_banking_app/Model/Client.dart';
+import 'package:flutter_banking_app/Model/SharedPref.dart';
+import 'package:flutter_banking_app/Model/api_response.dart';
+import 'package:flutter_banking_app/Model/transaction_model.dart';
+import 'package:flutter_banking_app/business/transaction_service.dart';
 import 'package:flutter_banking_app/generated/assets.dart';
 import 'package:flutter_banking_app/json/shortcut_list.dart';
 import 'package:flutter_banking_app/json/transactions.dart';
+import 'package:flutter_banking_app/providers/transaction_list_providers.dart';
 import 'package:flutter_banking_app/utils/iconly/iconly_bold.dart';
 import 'package:flutter_banking_app/utils/layouts.dart';
 import 'package:flutter_banking_app/utils/size_config.dart';
 import 'package:flutter_banking_app/utils/styles.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 import 'Main-drawer.dart';
 
@@ -23,8 +30,43 @@ class _HomeState extends State<Home> {
   List<Color> gradientColors = [
     Styles.blueColor,
   ];
+  SharedPref sharedPref = new SharedPref();
+
+  List<Transaction>? transactionList=[];
+  final transactionService =TransactionService();
+  TransactionListProvider? provider;
+  ApiResponse<List<Transaction>>? _apiResponse;
+  bool _isLoading=false;
+  _HomeState();
+  Client? client;
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchTransaction();
+
+    super.initState();
+    loadSharedPrefs();
+  }
+  fetchTransaction() async{
+    setState(() {
+      _isLoading=true;
+    });
+    _apiResponse= await transactionService.getTransactionList();
+
+    setState(() {
+      _isLoading=false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    provider=Provider.of<TransactionListProvider>(context);
+    /*if(provider?.state==ListScreenState.initial){
+      provider?.getTransaction();
+      return Center(child: CircularProgressIndicator(),);
+    }
+    else{
+      transactionList= provider?.listTransaction;
+    }*/
 
     SizeConfig.init(context);
     final size = Layouts.getSize(context);
@@ -89,7 +131,7 @@ class _HomeState extends State<Home> {
                       children: [
                         Image.asset(Assets.cardsVisaYellow,
                             width: 60, height: 50, fit: BoxFit.cover),
-                        const Text('\$20,000.00',
+                        const Text('\20,000.00 DH',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 32,
@@ -250,6 +292,7 @@ class _HomeState extends State<Home> {
               )
             ],
           ),
+
           ListView.builder(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
@@ -412,5 +455,18 @@ class _HomeState extends State<Home> {
         ),
       ],
     );
+  }
+  loadSharedPrefs() async {
+
+    try {
+      Client clientInShared = Client.fromJson(await sharedPref.read("client"));
+      setState(() {
+        this.client=clientInShared;
+
+      });
+    } catch (Excepetion) {
+      print("withSizedBar");
+      print(Excepetion.toString());
+    }
   }
 }

@@ -56,7 +56,7 @@ class _StatsState extends State<Stats> {
                 ),
                 Container(
                     padding: const EdgeInsets.fromLTRB(20, 25, 20, 30),
-                    child: const Text('\$20,000.00 USD',
+                    child: const Text('\20,000.00 DH',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 32,
